@@ -23,8 +23,8 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import pl.edu.wspa.easybud.views.main.MainView;
 
-@Route(value = "master-detail", layout = MainView.class)
-@PageTitle("Master-Detail")
+@Route(value = "orders", layout = MainView.class)
+@PageTitle("Orders")
 @CssImport("styles/views/masterdetail/master-detail-view.css")
 public class OrdersView extends Div implements AfterNavigationObserver {
     @Autowired
@@ -43,7 +43,7 @@ public class OrdersView extends Div implements AfterNavigationObserver {
     private Binder<Employee> binder;
 
     public OrdersView() {
-        setId("master-detail-view");
+        setId("orders");
         // Configure Grid
         employees = new Grid<>();
         employees.addThemeVariants(GridVariant.LUMO_NO_BORDER);
