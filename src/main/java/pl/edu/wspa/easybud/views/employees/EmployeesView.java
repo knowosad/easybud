@@ -1,4 +1,4 @@
-package pl.edu.wspa.easybud.views.masterdetail;
+package pl.edu.wspa.easybud.views.employees;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import pl.edu.wspa.easybud.backend.BackendService;
@@ -23,10 +23,10 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import pl.edu.wspa.easybud.views.main.MainView;
 
-@Route(value = "master-detail", layout = MainView.class)
-@PageTitle("Master-Detail")
-@CssImport("styles/views/masterdetail/master-detail-view.css")
-public class MasterDetailView extends Div implements AfterNavigationObserver {
+@Route(value = "master-detail1", layout = MainView.class)
+@PageTitle("Master-Detail1")
+@CssImport("styles/views/masterdetail1/master-detail1-view.css")
+public class EmployeesView extends Div implements AfterNavigationObserver {
     @Autowired
     private BackendService service;
 
@@ -42,8 +42,8 @@ public class MasterDetailView extends Div implements AfterNavigationObserver {
 
     private Binder<Employee> binder;
 
-    public MasterDetailView() {
-        setId("master-detail-view");
+    public EmployeesView() {
+        setId("master-detail1-view");
         // Configure Grid
         employees = new Grid<>();
         employees.addThemeVariants(GridVariant.LUMO_NO_BORDER);
