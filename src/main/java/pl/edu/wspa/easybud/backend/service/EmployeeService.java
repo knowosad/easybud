@@ -1,11 +1,12 @@
-package pl.edu.wspa.easybud.backend;
+package pl.edu.wspa.easybud.backend.service;
 
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Service;
+import pl.edu.wspa.easybud.backend.entity.Employee;
 
 @Service
-public class BackendService {
+public class EmployeeService {
 
     private List<Employee> employees;
 

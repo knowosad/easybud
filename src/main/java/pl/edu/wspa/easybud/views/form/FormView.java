@@ -1,6 +1,6 @@
 package pl.edu.wspa.easybud.views.form;
 
-import pl.edu.wspa.easybud.backend.Employee;
+import pl.edu.wspa.easybud.backend.entity.Employee;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;

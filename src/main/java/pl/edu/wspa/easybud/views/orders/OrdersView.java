@@ -1,8 +1,11 @@
 package pl.edu.wspa.easybud.views.orders;
 
+import ch.qos.logback.core.joran.conditional.IfAction;
+import com.vaadin.flow.component.html.Label;
 import org.springframework.beans.factory.annotation.Autowired;
-import pl.edu.wspa.easybud.backend.BackendService;
-import pl.edu.wspa.easybud.backend.Employee;
+import pl.edu.wspa.easybud.backend.entity.OrderEntity;
+import pl.edu.wspa.easybud.backend.service.EmployeeService;
+import pl.edu.wspa.easybud.backend.entity.Employee;
 import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -21,21 +24,26 @@ import com.vaadin.flow.router.AfterNavigationEvent;
 import com.vaadin.flow.router.AfterNavigationObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import pl.edu.wspa.easybud.backend.service.OrderService;
 import pl.edu.wspa.easybud.views.main.MainView;
 
 @Route(value = "orders", layout = MainView.class)
 @PageTitle("Orders")
 @CssImport("styles/views/masterdetail/master-detail-view.css")
 public class OrdersView extends Div implements AfterNavigationObserver {
+
     @Autowired
-    private BackendService service;
+    private EmployeeService service;
+
+    @Autowired
+    private OrderService orderService;
 
     private Grid<Employee> employees;
 
     private TextField firstname = new TextField();
     private TextField lastname = new TextField();
-    private TextField email = new TextField();
-    private PasswordField password = new PasswordField();
+//    private TextField email = new TextField();
+//    private PasswordField password = new PasswordField();
 
     private Button cancel = new Button("Cancel");
     private Button save = new Button("Save");
@@ -48,9 +56,9 @@ public class OrdersView extends Div implements AfterNavigationObserver {
         employees = new Grid<>();
         employees.addThemeVariants(GridVariant.LUMO_NO_BORDER);
         employees.setHeightFull();
-        employees.addColumn(Employee::getFirstname).setHeader("First name");
-        employees.addColumn(Employee::getLastname).setHeader("Last name");
-        employees.addColumn(Employee::getEmail).setHeader("Email");
+        employees.addColumn(Employee::getFirstname).setHeader("Label");
+        employees.addColumn(Employee::getLastname).setHeader("Name");
+//        employees.addColumn(Employee::getEmail).setHeader("Email");
 
         //when a row is selected or deselected, populate form
         employees.asSingleSelect().addValueChangeListener(event -> populateForm(event.getValue()));
@@ -67,7 +75,7 @@ public class OrdersView extends Div implements AfterNavigationObserver {
         cancel.addClickListener(e -> employees.asSingleSelect().clear());
 
         save.addClickListener(e -> {
-            Notification.show("Not implemented");
+            save();
         });
 
         SplitLayout splitLayout = new SplitLayout();
@@ -79,14 +87,24 @@ public class OrdersView extends Div implements AfterNavigationObserver {
         add(splitLayout);
     }
 
+    private void save() {
+        if (!firstname.isEmpty() && !lastname.isEmpty()){
+            OrderEntity entity = new OrderEntity(firstname.getValue(), lastname.getValue());
+            String response = orderService.create(entity);
+            Notification.show(response);
+        } else {
+            Notification.show("Set required values!");
+        }
+    }
+
     private void createEditorLayout(SplitLayout splitLayout) {
         Div editorDiv = new Div();
         editorDiv.setId("editor-layout");
         FormLayout formLayout = new FormLayout();
-        addFormItem(editorDiv, formLayout, firstname, "First name");
-        addFormItem(editorDiv, formLayout, lastname, "Last name");
-        addFormItem(editorDiv, formLayout, email, "Email");
-        addFormItem(editorDiv, formLayout, password, "Password");
+        addFormItem(editorDiv, formLayout, firstname, "Label");
+        addFormItem(editorDiv, formLayout, lastname, "Name");
+//        addFormItem(editorDiv, formLayout, email, "Email");
+//        addFormItem(editorDiv, formLayout, password, "Password");
         createButtonLayout(editorDiv);
         splitLayout.addToSecondary(editorDiv);
     }
@@ -130,6 +148,6 @@ public class OrdersView extends Div implements AfterNavigationObserver {
         binder.readBean(value);
 
         // The password field isn't bound through the binder, so handle that
-        password.setValue("");
+//        password.setValue("");
     }
 }
