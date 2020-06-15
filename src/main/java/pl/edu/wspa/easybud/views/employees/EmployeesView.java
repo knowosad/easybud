@@ -1,8 +1,10 @@
 package pl.edu.wspa.easybud.views.employees;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import pl.edu.wspa.easybud.backend.State;
+import pl.edu.wspa.easybud.backend.entity.OrderEntity;
 import pl.edu.wspa.easybud.backend.service.EmployeeService;
-import pl.edu.wspa.easybud.backend.entity.Employee;
+import pl.edu.wspa.easybud.backend.entity.EmployeeEntity;
 import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -27,109 +29,182 @@ import pl.edu.wspa.easybud.views.main.MainView;
 @PageTitle("Employees")
 @CssImport("styles/views/masterdetail1/master-detail1-view.css")
 public class EmployeesView extends Div implements AfterNavigationObserver {
-    @Autowired
-    private EmployeeService service;
 
-    private Grid<Employee> employees;
+  @Autowired
+  private EmployeeService service;
 
-    private TextField firstname = new TextField();
-    private TextField lastname = new TextField();
-    private TextField email = new TextField();
-    private PasswordField password = new PasswordField();
+  private Grid<EmployeeEntity> employees;
 
-    private Button cancel = new Button("Cancel");
-    private Button save = new Button("Save");
+  private TextField number = new TextField();
+  private TextField label = new TextField();
+  private TextField firstname = new TextField();
+  private TextField lastname = new TextField();
+  //    private PasswordField password = new PasswordField();
 
-    private Binder<Employee> binder;
+  private Button cancel = new Button("Cancel");
+  private Button save = new Button("Save");
+  private Button update = new Button("Update");
+  private Button delete = new Button("Delete");
 
-    public EmployeesView() {
-        setId("employees");
-        // Configure Grid
-        employees = new Grid<>();
-        employees.addThemeVariants(GridVariant.LUMO_NO_BORDER);
-        employees.setHeightFull();
-        employees.addColumn(Employee::getFirstname).setHeader("First name");
-        employees.addColumn(Employee::getLastname).setHeader("Last name");
-        employees.addColumn(Employee::getEmail).setHeader("Email");
+  private Binder<EmployeeEntity> binder;
 
-        //when a row is selected or deselected, populate form
-        employees.asSingleSelect().addValueChangeListener(event -> populateForm(event.getValue()));
+  private HorizontalLayout buttonLayout;
+  private FormLayout formLayout;
 
-        // Configure Form
-        binder = new Binder<>(Employee.class);
+  public EmployeesView() {
+    setId("employees");
+    employees = new Grid<>();
+    employees.addThemeVariants(GridVariant.LUMO_NO_BORDER);
+    employees.setHeightFull();
+    employees.addColumn(EmployeeEntity::getNumber).setHeader("Number");
+    employees.addColumn(EmployeeEntity::getLabel).setHeader("Label");
+    employees.addColumn(EmployeeEntity::getFirstname).setHeader("First name");
+    employees.addColumn(EmployeeEntity::getLastname).setHeader("Last name");
 
-        // Bind fields. This where you'd define e.g. validation rules
-        binder.bindInstanceFields(this);
-        // note that password field isn't bound since that property doesn't exist in
-        // Employee
+    //when a row is selected or deselected, populate form
+    employees.asSingleSelect().addValueChangeListener(event -> populateForm(event.getValue()));
 
-        // the grid valueChangeEvent will clear the form too
-        cancel.addClickListener(e -> employees.asSingleSelect().clear());
+    // Configure Form
+    binder = new Binder<>(EmployeeEntity.class);
 
-        save.addClickListener(e -> {
-            Notification.show("Not implemented");
-        });
+    // Bind fields. This where you'd define e.g. validation rules
+    binder.bindInstanceFields(this);
+    // note that password field isn't bound since that property doesn't exist in
+    // Employee
 
-        SplitLayout splitLayout = new SplitLayout();
-        splitLayout.setSizeFull();
+    // the grid valueChangeEvent will clear the form too
+    cancel.addClickListener(e -> cancel());
+    save.addClickListener(e -> save());
+    update.addClickListener(e -> update());
+    delete.addClickListener(e -> delete());
 
-        createGridLayout(splitLayout);
-        createEditorLayout(splitLayout);
+    SplitLayout splitLayout = new SplitLayout();
+    splitLayout.setSizeFull();
 
-        add(splitLayout);
+    createGridLayout(splitLayout);
+    createEditorLayout(splitLayout);
+
+    add(splitLayout);
+  }
+
+  private void delete() {
+    service.delete(number.getValue());
+    employees.setItems(service.getEmployees());
+    buttonLayout.replace(update, save);
+    buttonLayout.replace(delete, null);
+    number.setEnabled(true);
+    clearForm();
+    Notification.show("The employee has been deleded");
+  }
+
+  private void clearForm() {
+    binder.readBean(new EmployeeEntity());
+    employees.asSingleSelect().clear();
+  }
+
+  private void update() {
+    if (allRequiredFilled()) {
+      EmployeeEntity entity = new EmployeeEntity();
+      entity.setNumber(number.getValue());
+      entity.setLabel(label.getValue());
+      entity.setFirstname(firstname.getValue());
+      entity.setLastname(lastname.getValue());
+      service.update(entity);
+      employees.setItems(service.getEmployees());
+      buttonLayout.replace(update, save);
+      buttonLayout.replace(delete, null);
+      number.setEnabled(true);
+      clearForm();
+      Notification.show("The employee has been updated");
+    } else {
+      Notification.show("Set required values!");
     }
+  }
 
-    private void createEditorLayout(SplitLayout splitLayout) {
-        Div editorDiv = new Div();
-        editorDiv.setId("editor-layout");
-        FormLayout formLayout = new FormLayout();
-        addFormItem(editorDiv, formLayout, firstname, "First name");
-        addFormItem(editorDiv, formLayout, lastname, "Last name");
-        addFormItem(editorDiv, formLayout, email, "Email");
-        addFormItem(editorDiv, formLayout, password, "Password");
-        createButtonLayout(editorDiv);
-        splitLayout.addToSecondary(editorDiv);
+  private void cancel() {
+    clearForm();
+    number.setEnabled(true);
+    buttonLayout.replace(update, save);
+    buttonLayout.replace(delete, null);
+  }
+
+  private void save() {
+    if (allRequiredFilled()) {
+      EmployeeEntity entity =
+          EmployeeEntity.builder()
+              .state(State.ACTIVE.getName())
+              .number(number.getValue())
+              .label(label.getValue())
+              .firstname(firstname.getValue())
+              .lastname(lastname.getValue())
+              .build();
+      service.create(entity);
+      employees.setItems(service.getEmployees());
+      clearForm();
+      Notification.show("The employee has been created");
+    } else {
+      Notification.show("Set required values!");
     }
+  }
 
-    private void createButtonLayout(Div editorDiv) {
-        HorizontalLayout buttonLayout = new HorizontalLayout();
-        buttonLayout.setId("button-layout");
-        buttonLayout.setWidthFull();
-        buttonLayout.setSpacing(true);
-        cancel.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
-        save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        buttonLayout.add(cancel, save);
-        editorDiv.add(buttonLayout);
-    }
+  private boolean allRequiredFilled() {
+    return !number.isEmpty() && !label.isEmpty() && !firstname.isEmpty() && !lastname.isEmpty();
+  }
 
-    private void createGridLayout(SplitLayout splitLayout) {
-        Div wrapper = new Div();
-        wrapper.setId("wrapper");
-        wrapper.setWidthFull();
-        splitLayout.addToPrimary(wrapper);
-        wrapper.add(employees);
-    }
+  private void createEditorLayout(SplitLayout splitLayout) {
+    Div editorDiv = new Div();
+    editorDiv.setId("editor-layout");
+    formLayout = new FormLayout();
+    addFormItem(editorDiv, formLayout, number, "Number");
+    addFormItem(editorDiv, formLayout, label, "Label");
+    addFormItem(editorDiv, formLayout, firstname, "First name");
+    addFormItem(editorDiv, formLayout, lastname, "Last name");
+    createButtonLayout(editorDiv);
+    splitLayout.addToSecondary(editorDiv);
+  }
 
-    private void addFormItem(Div wrapper, FormLayout formLayout,
-            AbstractField field, String fieldName) {
-        formLayout.addFormItem(field, fieldName);
-        wrapper.add(formLayout);
-        field.getElement().getClassList().add("full-width");
-    }
+  private void createButtonLayout(Div editorDiv) {
+    buttonLayout = new HorizontalLayout();
+    buttonLayout.setId("button-layout");
+    buttonLayout.setWidthFull();
+    buttonLayout.setSpacing(true);
+    cancel.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
+    save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+    update.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+    buttonLayout.add(cancel, save);
+    editorDiv.add(buttonLayout);
+  }
 
-    @Override
-    public void afterNavigation(AfterNavigationEvent event) {
+  private void createGridLayout(SplitLayout splitLayout) {
+    Div wrapper = new Div();
+    wrapper.setId("wrapper");
+    wrapper.setWidthFull();
+    splitLayout.addToPrimary(wrapper);
+    wrapper.add(employees);
+  }
 
-        // Lazy init of the grid items, happens only when we are sure the view will be
-        // shown to the user
-        employees.setItems(service.getEmployees());
-    }
+  private void addFormItem(Div wrapper, FormLayout formLayout, AbstractField field, String fieldName) {
+    formLayout.addFormItem(field, fieldName);
+    wrapper.add(formLayout);
+    field.getElement().getClassList().add("full-width");
+  }
 
-    private void populateForm(Employee value) {
-        // Value can be null as well, that clears the form
-        binder.readBean(value);
+  @Override
+  public void afterNavigation(AfterNavigationEvent event) {
 
-        // The password field isn't bound through the binder, so handle that
-        password.setValue("");
-    }
+    // Lazy init of the grid items, happens only when we are sure the view will be
+    // shown to the user
+    employees.setItems(service.getEmployees());
+  }
+
+  private void populateForm(EmployeeEntity value) {
+    buttonLayout.replace(save, update);
+    buttonLayout.add(delete);
+    number.setEnabled(false);
+    // Value can be null as well, that clears the form
+    binder.readBean(value);
+
+    // The password field isn't bound through the binder, so handle that
+    //        password.setValue("");
+  }
 }

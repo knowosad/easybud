@@ -1,12 +1,8 @@
 package pl.edu.wspa.easybud.views.orders;
 
-import ch.qos.logback.core.joran.conditional.IfAction;
-import com.vaadin.flow.component.html.Label;
 import org.springframework.beans.factory.annotation.Autowired;
 import pl.edu.wspa.easybud.backend.State;
 import pl.edu.wspa.easybud.backend.entity.OrderEntity;
-import pl.edu.wspa.easybud.backend.service.EmployeeService;
-import pl.edu.wspa.easybud.backend.entity.Employee;
 import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -18,7 +14,6 @@ import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.splitlayout.SplitLayout;
-import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.router.AfterNavigationEvent;
@@ -27,13 +22,12 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import pl.edu.wspa.easybud.backend.service.OrderService;
 import pl.edu.wspa.easybud.views.main.MainView;
-import sun.net.ProgressSource;
 
 @Route(value = "orders", layout = MainView.class)
 @PageTitle("Orders")
 @CssImport("styles/views/masterdetail/master-detail-view.css")
 public class OrdersView extends Div implements AfterNavigationObserver {
-  
+
   @Autowired
   private OrderService orderService;
 
@@ -96,17 +90,17 @@ public class OrdersView extends Div implements AfterNavigationObserver {
     buttonLayout.replace(delete, null);
     number.setEnabled(true);
     clearForm();
-    Notification.show("the order has been deleded");
+    Notification.show("The order has been deleded");
   }
 
   private void clearForm() {
-    binder.readBean(new OrderEntity());
+    binder.readBean(OrderEntity.builder().build());
     orders.asSingleSelect().clear();
   }
 
   private void update() {
     if (allRequiredFilled()) {
-      OrderEntity entity = new OrderEntity();
+      OrderEntity entity = OrderEntity.builder().build();
       entity.setNumber(number.getValue());
       entity.setLabel(label.getValue());
       entity.setName(name.getValue());
@@ -116,7 +110,7 @@ public class OrdersView extends Div implements AfterNavigationObserver {
       buttonLayout.replace(delete, null);
       number.setEnabled(true);
       clearForm();
-      Notification.show("the order has been updated");
+      Notification.show("The order has been updated");
     } else {
       Notification.show("Set required values!");
     }
@@ -131,12 +125,17 @@ public class OrdersView extends Div implements AfterNavigationObserver {
 
   private void save() {
     if (allRequiredFilled()) {
-      OrderEntity entity = new OrderEntity(number.getValue(), label.getValue(), name.getValue());
-      String response = orderService.create(entity);
-      Notification.show(response);
+      OrderEntity entity =
+          OrderEntity.builder()
+              .state(State.ACTIVE.getName())
+              .number(number.getValue())
+              .label(label.getValue())
+              .name(name.getValue())
+              .build();
+      orderService.create(entity);
       orders.setItems(orderService.getOrders());
       clearForm();
-      Notification.show("The order has been saved");
+      Notification.show("The order has been created");
     } else {
       Notification.show("Set required values!");
     }

@@ -1,20 +1,23 @@
 package pl.edu.wspa.easybud.backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import pl.edu.wspa.easybud.backend.State;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import static javax.persistence.EnumType.STRING;
-
 @Data
 @Entity
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "t_orders")
 public class OrderEntity {
 
@@ -60,13 +63,6 @@ public class OrderEntity {
 //  @Column(name = "added")
 //  private LocalDateTime dateAdded;
 
-  public OrderEntity(String number, String label, String name) {
-    this.state = State.ACTIVE.getName();
-    this.number = number;
-    this.label = label;
-    this.name = name;
-  }
-
-  public OrderEntity() {
-  }
+//  public OrderEntity() {
+//  }
 }

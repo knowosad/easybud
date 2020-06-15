@@ -1,6 +1,6 @@
 package pl.edu.wspa.easybud.views.form;
 
-import pl.edu.wspa.easybud.backend.entity.Employee;
+import pl.edu.wspa.easybud.backend.entity.EmployeeEntity;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -41,7 +41,7 @@ public class FormView extends Div {
         createButtonLayout(wrapper);
 
         // Configure Form
-        Binder<Employee> binder = new Binder<>(Employee.class);
+        Binder<EmployeeEntity> binder = new Binder<>(EmployeeEntity.class);
 
         // Bind fields. This where you'd define e.g. validation rules
         binder.bindInstanceFields(this);

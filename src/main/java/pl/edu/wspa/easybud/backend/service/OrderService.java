@@ -19,9 +19,8 @@ public class OrderService {
     this.orderRepository = orderRepository;
   }
 
-  public String create(OrderEntity entity){
-    OrderEntity responseEntity = orderRepository.save(entity);
-      return "Order created";
+  public void create(OrderEntity entity){
+    orderRepository.save(entity);
   }
 
   public List<OrderEntity> getOrders () {
