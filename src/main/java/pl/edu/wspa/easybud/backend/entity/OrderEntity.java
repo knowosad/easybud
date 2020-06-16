@@ -1,17 +1,17 @@
 package pl.edu.wspa.easybud.backend.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import pl.edu.wspa.easybud.backend.State;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.time.LocalDate;
+
 
 @Data
 @Entity
@@ -38,21 +38,22 @@ public class OrderEntity {
   @Column(name = "name")
   private String name;
 
+  @Column(name = "address")
+  private String address;
 
-//  @Column(name = "address_id")
-//  private String address; //TODO zmienić na encje
-//
-//  @Column(name = "planned_start")
-//  private LocalDateTime plannedStartDate;
-//
-//  @Column(name = "planned_end")
-//  private LocalDateTime plannedEndDate;
-//
-//  @Column(name = "start")
-//  private LocalDateTime startDate;
-//
-//  @Column(name = "end")
-//  private LocalDateTime endDate;
+  @Column(name = "start_date")
+  private LocalDate startDate;
+
+  @Column(name = "end_date")
+  private LocalDate endDate;
+
+
+  //  @Column(name = "planned_start")
+  //  private LocalDateTime plannedStartDate;
+  //
+  //  @Column(name = "planned_end")
+  //  private LocalDateTime plannedEndDate;
+  //
 //
 //  @Column(name = "description")
 //  private String description;

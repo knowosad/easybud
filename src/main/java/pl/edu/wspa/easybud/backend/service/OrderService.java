@@ -32,6 +32,9 @@ public class OrderService {
     OrderEntity entity = orderRepository.findByNumber(orderEntity.getNumber());
     entity.setLabel(orderEntity.getLabel());
     entity.setName(orderEntity.getName());
+    entity.setAddress(orderEntity.getAddress());
+    entity.setStartDate(orderEntity.getStartDate());
+    entity.setEndDate(orderEntity.getEndDate());
   }
 
   @Transactional

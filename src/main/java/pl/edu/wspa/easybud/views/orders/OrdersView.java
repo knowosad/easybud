@@ -1,11 +1,9 @@
 package pl.edu.wspa.easybud.views.orders;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import pl.edu.wspa.easybud.backend.State;
-import pl.edu.wspa.easybud.backend.entity.OrderEntity;
 import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
@@ -20,6 +18,9 @@ import com.vaadin.flow.router.AfterNavigationEvent;
 import com.vaadin.flow.router.AfterNavigationObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import org.springframework.beans.factory.annotation.Autowired;
+import pl.edu.wspa.easybud.backend.State;
+import pl.edu.wspa.easybud.backend.entity.OrderEntity;
 import pl.edu.wspa.easybud.backend.service.OrderService;
 import pl.edu.wspa.easybud.views.main.MainView;
 
@@ -36,6 +37,9 @@ public class OrdersView extends Div implements AfterNavigationObserver {
   private TextField label = new TextField();
   private TextField name = new TextField();
   private TextField number = new TextField();
+  private TextField address = new TextField();
+  private DatePicker startDate = new DatePicker();
+  private DatePicker endDate = new DatePicker();
   //    private PasswordField password = new PasswordField();
 
   private Button cancel = new Button("Cancel");
@@ -57,6 +61,9 @@ public class OrdersView extends Div implements AfterNavigationObserver {
     orders.addColumn(OrderEntity::getNumber).setHeader("Number");
     orders.addColumn(OrderEntity::getLabel).setHeader("Label");
     orders.addColumn(OrderEntity::getName).setHeader("Name");
+    orders.addColumn(OrderEntity::getStartDate).setHeader("Start date");
+    orders.addColumn(OrderEntity::getEndDate).setHeader("Start end");
+
 
     //when a row is selected or deselected, populate form
     orders.asSingleSelect().addValueChangeListener(event -> populateForm(event.getValue()));
@@ -104,6 +111,10 @@ public class OrdersView extends Div implements AfterNavigationObserver {
       entity.setNumber(number.getValue());
       entity.setLabel(label.getValue());
       entity.setName(name.getValue());
+      entity.setAddress(address.getValue());
+      entity.setStartDate(startDate.getValue());
+      entity.setEndDate(endDate.getValue());
+
       orderService.update(entity);
       orders.setItems(orderService.getOrders());
       buttonLayout.replace(update, save);
@@ -131,6 +142,9 @@ public class OrdersView extends Div implements AfterNavigationObserver {
               .number(number.getValue())
               .label(label.getValue())
               .name(name.getValue())
+              .address(address.getValue())
+              .startDate(startDate.getValue())
+              .endDate(endDate.getValue())
               .build();
       orderService.create(entity);
       orders.setItems(orderService.getOrders());
@@ -152,6 +166,10 @@ public class OrdersView extends Div implements AfterNavigationObserver {
     addFormItem(editorDiv, formLayout, number, "Number");
     addFormItem(editorDiv, formLayout, label, "Label");
     addFormItem(editorDiv, formLayout, name, "Name");
+    addFormItem(editorDiv, formLayout, address, "Address");
+    addFormItem(editorDiv, formLayout, startDate, "Start date");
+    addFormItem(editorDiv, formLayout, endDate, "End date");
+
     createButtonLayout(editorDiv);
     splitLayout.addToSecondary(editorDiv);
   }
