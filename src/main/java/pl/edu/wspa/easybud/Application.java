@@ -8,7 +8,6 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 /**
  * The entry point of the Spring Boot application.
  */
-//@SpringBootApplication
 @SpringBootApplication(exclude = ErrorMvcAutoConfiguration.class)
 public class Application extends SpringBootServletInitializer {
 

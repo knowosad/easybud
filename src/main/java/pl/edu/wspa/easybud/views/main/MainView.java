@@ -17,6 +17,7 @@ import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.theme.Theme;import com.vaadin.flow.theme.lumo.Lumo;
 
+import pl.edu.wspa.easybud.views.contractors.ContractorsView;
 import pl.edu.wspa.easybud.views.dashboard.DashboardView;
 import pl.edu.wspa.easybud.views.orders.OrdersView;
 import pl.edu.wspa.easybud.views.employees.EmployeesView;
@@ -55,6 +56,7 @@ public class MainView extends AppLayout {
         tabs.add(createTab("Dashboard", DashboardView.class));
         tabs.add(createTab("Orders", OrdersView.class));
         tabs.add(createTab("Employees", EmployeesView.class));
+        tabs.add(createTab("Contractors", ContractorsView.class));
         tabs.add(createTab("Card List", CardListView.class));
         tabs.add(createTab("Form", FormView.class));
         tabs.add(createTab("Empty", EmptyView.class));
