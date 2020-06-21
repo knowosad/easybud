@@ -23,10 +23,9 @@ public class ContractorService {
     repository.save(entity);
   }
 
-  public List<ContractorEntity> getContractors () {
+  public List<ContractorEntity> getAllActive() {
     return repository.findByStateEquals(State.ACTIVE.getName());
   }
-
 
   @Transactional
   public void update(ContractorEntity contractor) {

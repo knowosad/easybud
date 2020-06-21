@@ -5,13 +5,17 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.time.LocalDate;
-
+import java.util.List;
 
 @Data
 @Entity
@@ -23,22 +27,16 @@ public class OrderEntity {
 
   @Id
   @GeneratedValue
-  @Column(name = "id")
   private Long id;
 
-  @Column(name = "state")
   private String state;
 
-  @Column(name = "number")
   private String number;
 
-  @Column(name = "label")
   private String label;
 
-  @Column(name = "name")
   private String name;
 
-  @Column(name = "address")
   private String address;
 
   @Column(name = "start_date")
@@ -47,23 +45,10 @@ public class OrderEntity {
   @Column(name = "end_date")
   private LocalDate endDate;
 
+  @ManyToOne
+  private ContractorEntity contractor;
 
-  //  @Column(name = "planned_start")
-  //  private LocalDateTime plannedStartDate;
-  //
-  //  @Column(name = "planned_end")
-  //  private LocalDateTime plannedEndDate;
-  //
-//
-//  @Column(name = "description")
-//  private String description;
-//
-//  @Column(name = "contractor_id")
-//  private Integer contractorId ;  //TODO zmienić na encje
-//
-//  @Column(name = "added")
-//  private LocalDateTime dateAdded;
+  @OneToMany
+  private List<EmployeeEntity> employees;
 
-//  public OrderEntity() {
-//  }
 }

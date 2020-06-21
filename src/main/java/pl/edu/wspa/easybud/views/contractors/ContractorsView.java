@@ -85,7 +85,7 @@ public class ContractorsView extends Div implements AfterNavigationObserver {
 
   private void delete() {
     contractorService.delete(number.getValue());
-    contractors.setItems(contractorService.getContractors());
+    contractors.setItems(contractorService.getAllActive());
     buttonLayout.replace(update, save);
     buttonLayout.replace(delete, null);
     number.setEnabled(true);
@@ -107,7 +107,7 @@ public class ContractorsView extends Div implements AfterNavigationObserver {
       entity.setAddress(address.getValue());
 
       contractorService.update(entity);
-      contractors.setItems(contractorService.getContractors());
+      contractors.setItems(contractorService.getAllActive());
       buttonLayout.replace(update, save);
       buttonLayout.replace(delete, null);
       number.setEnabled(true);
@@ -136,7 +136,7 @@ public class ContractorsView extends Div implements AfterNavigationObserver {
               .address(address.getValue())
               .build();
       contractorService.create(entity);
-      contractors.setItems(contractorService.getContractors());
+      contractors.setItems(contractorService.getAllActive());
       clearForm();
       Notification.show("The contractor has been created");
     } else {
@@ -192,7 +192,7 @@ public class ContractorsView extends Div implements AfterNavigationObserver {
 
     // Lazy init of the grid items, happens only when we are sure the view will be
     // shown to the user
-    contractors.setItems(contractorService.getContractors());
+    contractors.setItems(contractorService.getAllActive());
   }
 
   private void populateForm(ContractorEntity value) {

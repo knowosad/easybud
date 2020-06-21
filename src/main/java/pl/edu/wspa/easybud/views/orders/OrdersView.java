@@ -3,6 +3,7 @@ package pl.edu.wspa.easybud.views.orders;
 import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.formlayout.FormLayout;
@@ -20,7 +21,9 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
 import pl.edu.wspa.easybud.backend.State;
+import pl.edu.wspa.easybud.backend.entity.ContractorEntity;
 import pl.edu.wspa.easybud.backend.entity.OrderEntity;
+import pl.edu.wspa.easybud.backend.service.ContractorService;
 import pl.edu.wspa.easybud.backend.service.OrderService;
 import pl.edu.wspa.easybud.views.main.MainView;
 
@@ -32,6 +35,9 @@ public class OrdersView extends Div implements AfterNavigationObserver {
   @Autowired
   private OrderService orderService;
 
+  @Autowired
+  private ContractorService contractorService;
+
   private Grid<OrderEntity> orders;
 
   private TextField label = new TextField();
@@ -40,6 +46,7 @@ public class OrdersView extends Div implements AfterNavigationObserver {
   private TextField address = new TextField();
   private DatePicker startDate = new DatePicker();
   private DatePicker endDate = new DatePicker();
+  private ComboBox<ContractorEntity> contractors = new ComboBox<>();
   //    private PasswordField password = new PasswordField();
 
   private Button cancel = new Button("Cancel");
@@ -63,10 +70,9 @@ public class OrdersView extends Div implements AfterNavigationObserver {
     orders.addColumn(OrderEntity::getName).setHeader("Name");
     orders.addColumn(OrderEntity::getStartDate).setHeader("Start date");
     orders.addColumn(OrderEntity::getEndDate).setHeader("Start end");
-
-
     //when a row is selected or deselected, populate form
-    orders.asSingleSelect().addValueChangeListener(event -> populateForm(event.getValue()));
+//    orders.asSingleSelect().addValueChangeListener(event -> populateForm(event.getValue()));
+    orders.addItemClickListener(event -> populateForm(event.getItem()));
 
     // Configure Form
     binder = new Binder<>(OrderEntity.class);
@@ -101,8 +107,9 @@ public class OrdersView extends Div implements AfterNavigationObserver {
   }
 
   private void clearForm() {
-    binder.readBean(OrderEntity.builder().build());
+    binder.readBean(null);
     orders.asSingleSelect().clear();
+    contractors.clear();
   }
 
   private void update() {
@@ -114,6 +121,9 @@ public class OrdersView extends Div implements AfterNavigationObserver {
       entity.setAddress(address.getValue());
       entity.setStartDate(startDate.getValue());
       entity.setEndDate(endDate.getValue());
+      String label = contractors.getValue().getLabel();
+      Notification.show("update: " + label);
+      entity.setContractor(contractors.getValue());
 
       orderService.update(entity);
       orders.setItems(orderService.getOrders());
@@ -145,6 +155,7 @@ public class OrdersView extends Div implements AfterNavigationObserver {
               .address(address.getValue())
               .startDate(startDate.getValue())
               .endDate(endDate.getValue())
+              .contractor(contractors.getValue())
               .build();
       orderService.create(entity);
       orders.setItems(orderService.getOrders());
@@ -169,6 +180,7 @@ public class OrdersView extends Div implements AfterNavigationObserver {
     addFormItem(editorDiv, formLayout, address, "Address");
     addFormItem(editorDiv, formLayout, startDate, "Start date");
     addFormItem(editorDiv, formLayout, endDate, "End date");
+    addFormItem(editorDiv, formLayout, contractors, "Contractor");
 
     createButtonLayout(editorDiv);
     splitLayout.addToSecondary(editorDiv);
@@ -206,14 +218,19 @@ public class OrdersView extends Div implements AfterNavigationObserver {
     // Lazy init of the grid items, happens only when we are sure the view will be
     // shown to the user
     orders.setItems(orderService.getOrders());
+    contractors.setItems(contractorService.getAllActive());
+    contractors.setItemLabelGenerator(ContractorEntity::getLabel);
   }
 
-  private void populateForm(OrderEntity value) {
+  private void populateForm(OrderEntity order) {
     buttonLayout.replace(save, update);
     buttonLayout.add(delete);
     number.setEnabled(false);
+
+    contractors.setItems(contractorService.getAllActive());
+    contractors.setValue(order.getContractor());
     // Value can be null as well, that clears the form
-    binder.readBean(value);
+    binder.readBean(order);
 
     // The password field isn't bound through the binder, so handle that
     //        password.setValue("");

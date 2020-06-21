@@ -35,6 +35,7 @@ public class OrderService {
     entity.setAddress(orderEntity.getAddress());
     entity.setStartDate(orderEntity.getStartDate());
     entity.setEndDate(orderEntity.getEndDate());
+    entity.setContractor(orderEntity.getContractor());
   }
 
   @Transactional
