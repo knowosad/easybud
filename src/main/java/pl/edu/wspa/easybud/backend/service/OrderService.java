@@ -43,4 +43,8 @@ public class OrderService {
     OrderEntity entity = orderRepository.findByNumber(number);
     entity.setState(State.DELETED.getName());
   }
+
+  public List<OrderEntity> getAllActive() {
+    return orderRepository.findByStateEquals(State.ACTIVE.getName());
+  }
 }

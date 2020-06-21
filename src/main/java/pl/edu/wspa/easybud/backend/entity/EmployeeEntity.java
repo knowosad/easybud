@@ -42,6 +42,7 @@ public class EmployeeEntity {
     @Column(name = "lastname")
     private String lastname;
 
-    private String orderNumber;
+    @ManyToOne
+    private OrderEntity order;
 
 }

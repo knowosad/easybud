@@ -17,9 +17,12 @@ public class EmployeeService {
 
     private final EmployeeRepository employeeRepository;
 
+    private final OrderRepository orderRepository;
+
     @Autowired
-    public EmployeeService(EmployeeRepository employeeRepository) {
+    public EmployeeService(EmployeeRepository employeeRepository, OrderRepository orderRepository) {
         this.employeeRepository = employeeRepository;
+        this.orderRepository = orderRepository;
     }
 
     public void create(EmployeeEntity entity){
@@ -36,6 +39,7 @@ public class EmployeeService {
         entity.setLabel(employeeEntity.getLabel());
         entity.setFirstname(employeeEntity.getFirstname());
         entity.setLastname(employeeEntity.getLastname());
+        entity.setOrder(employeeEntity.getOrder());
     }
 
     @Transactional
@@ -44,6 +48,14 @@ public class EmployeeService {
         entity.setState(State.DELETED.getName());
     }
 
+    public List<EmployeeEntity> findAllByLabel(OrderEntity order) {
+        return employeeRepository.findByOrder(order);
+    }
+
+    public List<EmployeeEntity> findAllByOrderNumber(String orderNumber) {
+        OrderEntity orderEntity = orderRepository.findByNumber(orderNumber);
+        return employeeRepository.findByOrder(orderEntity);
+    }
 }
 
 

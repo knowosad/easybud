@@ -1,6 +1,7 @@
 package pl.edu.wspa.easybud.views.orders;
 
 import com.vaadin.flow.component.AbstractField;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
@@ -19,12 +20,14 @@ import com.vaadin.flow.router.AfterNavigationEvent;
 import com.vaadin.flow.router.AfterNavigationObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.VaadinSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import pl.edu.wspa.easybud.backend.State;
 import pl.edu.wspa.easybud.backend.entity.ContractorEntity;
 import pl.edu.wspa.easybud.backend.entity.OrderEntity;
 import pl.edu.wspa.easybud.backend.service.ContractorService;
 import pl.edu.wspa.easybud.backend.service.OrderService;
+import pl.edu.wspa.easybud.views.employees.EmployeesView;
 import pl.edu.wspa.easybud.views.main.MainView;
 
 @Route(value = "orders", layout = MainView.class)
@@ -53,6 +56,7 @@ public class OrdersView extends Div implements AfterNavigationObserver {
   private Button save = new Button("Save");
   private Button update = new Button("Update");
   private Button delete = new Button("Delete");
+  private Button goToEmployees = new Button("Show employees");
 
   private Binder<OrderEntity> binder;
 
@@ -86,6 +90,7 @@ public class OrdersView extends Div implements AfterNavigationObserver {
     save.addClickListener(e -> save());
     update.addClickListener(e -> update());
     delete.addClickListener(e -> delete());
+    goToEmployees.addClickListener(e -> showEmployees(number.getValue()));
 
     SplitLayout splitLayout = new SplitLayout();
     splitLayout.setSizeFull();
@@ -96,11 +101,18 @@ public class OrdersView extends Div implements AfterNavigationObserver {
     add(splitLayout);
   }
 
+  private void showEmployees(String number) {
+    VaadinSession vaadinSession = VaadinSession.getCurrent();
+    vaadinSession.setAttribute("orderNumber", number);
+    UI.getCurrent().navigate(EmployeesView.class);
+  }
+
   private void delete() {
     orderService.delete(number.getValue());
     orders.setItems(orderService.getOrders());
     buttonLayout.replace(update, save);
     buttonLayout.replace(delete, null);
+    buttonLayout.replace(goToEmployees, null);
     number.setEnabled(true);
     clearForm();
     Notification.show("The order has been deleded");
@@ -121,14 +133,13 @@ public class OrdersView extends Div implements AfterNavigationObserver {
       entity.setAddress(address.getValue());
       entity.setStartDate(startDate.getValue());
       entity.setEndDate(endDate.getValue());
-      String label = contractors.getValue().getLabel();
-      Notification.show("update: " + label);
       entity.setContractor(contractors.getValue());
 
       orderService.update(entity);
       orders.setItems(orderService.getOrders());
       buttonLayout.replace(update, save);
       buttonLayout.replace(delete, null);
+      buttonLayout.replace(goToEmployees, null);
       number.setEnabled(true);
       clearForm();
       Notification.show("The order has been updated");
@@ -142,6 +153,7 @@ public class OrdersView extends Div implements AfterNavigationObserver {
     number.setEnabled(true);
     buttonLayout.replace(update, save);
     buttonLayout.replace(delete, null);
+    buttonLayout.replace(goToEmployees, null);
   }
 
   private void save() {
@@ -194,6 +206,7 @@ public class OrdersView extends Div implements AfterNavigationObserver {
     cancel.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
     save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
     update.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+    goToEmployees.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
     buttonLayout.add(cancel, save);
     editorDiv.add(buttonLayout);
   }
@@ -225,6 +238,7 @@ public class OrdersView extends Div implements AfterNavigationObserver {
   private void populateForm(OrderEntity order) {
     buttonLayout.replace(save, update);
     buttonLayout.add(delete);
+    buttonLayout.add(goToEmployees);
     number.setEnabled(false);
 
     contractors.setItems(contractorService.getAllActive());

@@ -1,13 +1,10 @@
 package pl.edu.wspa.easybud.views.employees;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import pl.edu.wspa.easybud.backend.State;
-import pl.edu.wspa.easybud.backend.entity.OrderEntity;
-import pl.edu.wspa.easybud.backend.service.EmployeeService;
-import pl.edu.wspa.easybud.backend.entity.EmployeeEntity;
 import com.vaadin.flow.component.AbstractField;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
@@ -16,13 +13,20 @@ import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.splitlayout.SplitLayout;
-import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.router.AfterNavigationEvent;
 import com.vaadin.flow.router.AfterNavigationObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.VaadinSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import pl.edu.wspa.easybud.backend.State;
+import pl.edu.wspa.easybud.backend.entity.ContractorEntity;
+import pl.edu.wspa.easybud.backend.entity.EmployeeEntity;
+import pl.edu.wspa.easybud.backend.entity.OrderEntity;
+import pl.edu.wspa.easybud.backend.service.EmployeeService;
+import pl.edu.wspa.easybud.backend.service.OrderService;
 import pl.edu.wspa.easybud.views.main.MainView;
 
 @Route(value = "employees", layout = MainView.class)
@@ -31,7 +35,10 @@ import pl.edu.wspa.easybud.views.main.MainView;
 public class EmployeesView extends Div implements AfterNavigationObserver {
 
   @Autowired
-  private EmployeeService service;
+  private EmployeeService employeeService;
+
+  @Autowired
+  private OrderService orderService;
 
   private Grid<EmployeeEntity> employees;
 
@@ -39,7 +46,7 @@ public class EmployeesView extends Div implements AfterNavigationObserver {
   private TextField label = new TextField();
   private TextField firstname = new TextField();
   private TextField lastname = new TextField();
-  //    private PasswordField password = new PasswordField();
+  private ComboBox<OrderEntity> orders = new ComboBox<>();
 
   private Button cancel = new Button("Cancel");
   private Button save = new Button("Save");
@@ -60,9 +67,10 @@ public class EmployeesView extends Div implements AfterNavigationObserver {
     employees.addColumn(EmployeeEntity::getLabel).setHeader("Label");
     employees.addColumn(EmployeeEntity::getFirstname).setHeader("First name");
     employees.addColumn(EmployeeEntity::getLastname).setHeader("Last name");
+    employees.addColumn(emp -> emp.getOrder().getLabel()).setHeader("Order");
 
     //when a row is selected or deselected, populate form
-    employees.asSingleSelect().addValueChangeListener(event -> populateForm(event.getValue()));
+    employees.addItemClickListener(event -> populateForm(event.getItem()));
 
     // Configure Form
     binder = new Binder<>(EmployeeEntity.class);
@@ -88,8 +96,8 @@ public class EmployeesView extends Div implements AfterNavigationObserver {
   }
 
   private void delete() {
-    service.delete(number.getValue());
-    employees.setItems(service.getEmployees());
+    employeeService.delete(number.getValue());
+    employees.setItems(employeeService.getEmployees());
     buttonLayout.replace(update, save);
     buttonLayout.replace(delete, null);
     number.setEnabled(true);
@@ -100,6 +108,7 @@ public class EmployeesView extends Div implements AfterNavigationObserver {
   private void clearForm() {
     binder.readBean(new EmployeeEntity());
     employees.asSingleSelect().clear();
+    orders.clear();
   }
 
   private void update() {
@@ -109,8 +118,10 @@ public class EmployeesView extends Div implements AfterNavigationObserver {
       entity.setLabel(label.getValue());
       entity.setFirstname(firstname.getValue());
       entity.setLastname(lastname.getValue());
-      service.update(entity);
-      employees.setItems(service.getEmployees());
+      entity.setOrder(orders.getValue());
+
+      employeeService.update(entity);
+      employees.setItems(employeeService.getEmployees());
       buttonLayout.replace(update, save);
       buttonLayout.replace(delete, null);
       number.setEnabled(true);
@@ -137,9 +148,10 @@ public class EmployeesView extends Div implements AfterNavigationObserver {
               .label(label.getValue())
               .firstname(firstname.getValue())
               .lastname(lastname.getValue())
+              .order(orders.getValue())
               .build();
-      service.create(entity);
-      employees.setItems(service.getEmployees());
+      employeeService.create(entity);
+      employees.setItems(employeeService.getEmployees());
       clearForm();
       Notification.show("The employee has been created");
     } else {
@@ -159,6 +171,7 @@ public class EmployeesView extends Div implements AfterNavigationObserver {
     addFormItem(editorDiv, formLayout, label, "Label");
     addFormItem(editorDiv, formLayout, firstname, "First name");
     addFormItem(editorDiv, formLayout, lastname, "Last name");
+    addFormItem(editorDiv, formLayout, orders, "Order");
     createButtonLayout(editorDiv);
     splitLayout.addToSecondary(editorDiv);
   }
@@ -191,18 +204,27 @@ public class EmployeesView extends Div implements AfterNavigationObserver {
 
   @Override
   public void afterNavigation(AfterNavigationEvent event) {
-
+    VaadinSession vaadinSession = VaadinSession.getCurrent();
     // Lazy init of the grid items, happens only when we are sure the view will be
     // shown to the user
-    employees.setItems(service.getEmployees());
+    if (vaadinSession.getAttribute("orderNumber") != null){
+      employees.setItems(employeeService.findAllByOrderNumber((String) vaadinSession.getAttribute("orderNumber")));
+      vaadinSession.setAttribute("orderNumber", null);
+    } else {
+      employees.setItems(employeeService.getEmployees());
+    }
+    orders.setItems(orderService.getAllActive());
+    orders.setItemLabelGenerator(OrderEntity::getLabel);
   }
 
-  private void populateForm(EmployeeEntity value) {
+  private void populateForm(EmployeeEntity employee) {
     buttonLayout.replace(save, update);
     buttonLayout.add(delete);
     number.setEnabled(false);
+    orders.setItems(orderService.getAllActive());
+    orders.setValue(employee.getOrder());
     // Value can be null as well, that clears the form
-    binder.readBean(value);
+    binder.readBean(employee);
 
     // The password field isn't bound through the binder, so handle that
     //        password.setValue("");
