@@ -1,15 +1,10 @@
 package pl.edu.wspa.easybud.views.form;
 
-import com.vaadin.flow.component.AbstractField;
-import com.vaadin.flow.component.combobox.ComboBox;
-import com.vaadin.flow.router.AfterNavigationEvent;
-import com.vaadin.flow.router.AfterNavigationObserver;
-import com.vaadin.flow.server.VaadinSession;
-import org.springframework.beans.factory.annotation.Autowired;
-import pl.edu.wspa.easybud.backend.entity.EmployeeEntity;
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Div;
@@ -19,13 +14,21 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
-import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.router.AfterNavigationEvent;
+import com.vaadin.flow.router.AfterNavigationObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.VaadinService;
+import org.springframework.beans.factory.annotation.Autowired;
+import pl.edu.wspa.easybud.backend.NotificationType;
+import pl.edu.wspa.easybud.backend.entity.NotificationEntity;
 import pl.edu.wspa.easybud.backend.entity.OrderEntity;
+import pl.edu.wspa.easybud.backend.service.NotificationServive;
 import pl.edu.wspa.easybud.backend.service.OrderService;
 import pl.edu.wspa.easybud.views.main.MainView;
+
+import java.time.LocalDate;
 
 @Route(value = "notification", layout = MainView.class)
 @PageTitle("Notification")
@@ -35,8 +38,10 @@ public class NotificationView extends Div implements AfterNavigationObserver {
     @Autowired
     private OrderService orderService;
 
-    private TextField firstname = new TextField();
-    private TextField lastname = new TextField();
+    @Autowired
+    private NotificationServive notificationServive;
+
+    private ComboBox<NotificationType> type = new ComboBox<>();
     private ComboBox<OrderEntity> orders = new ComboBox<>();
     private TextArea description = new TextArea();
 
@@ -52,7 +57,7 @@ public class NotificationView extends Div implements AfterNavigationObserver {
         createButtonLayout(wrapper);
 
         // Configure Form
-        Binder<EmployeeEntity> binder = new Binder<>(EmployeeEntity.class);
+        Binder<NotificationEntity> binder = new Binder<>(NotificationEntity.class);
 
         // Bind fields. This where you'd define e.g. validation rules
         binder.bindInstanceFields(this);
@@ -64,8 +69,30 @@ public class NotificationView extends Div implements AfterNavigationObserver {
     }
 
     private void save() {
-        //TODO save to repo
-        clearForm();
+        if (allRequiredFilled()) {
+            NotificationEntity entity = buildNotification();
+            notificationServive.create(entity);
+            Notification.show("The notification has been created");
+
+            UI.getCurrent().navigate("card-list");
+            clearForm();
+        }else {
+            Notification.show("Set required values!");
+        }
+    }
+
+    private boolean allRequiredFilled() {
+        return !orders.isEmpty() && !description.isEmpty() && !type.isEmpty();
+    }
+
+    private NotificationEntity buildNotification() {
+        return NotificationEntity.builder()
+            .type(type.getValue())
+            .order(orders.getValue())
+            .description(description.getValue())
+            .dateCreated(LocalDate.now())
+            .userCreated(VaadinService.getCurrentRequest().getRemoteUser())
+            .build();
     }
 
     private void cancel() {
@@ -73,8 +100,7 @@ public class NotificationView extends Div implements AfterNavigationObserver {
     }
 
     private void clearForm() {
-        firstname.clear();
-        lastname.clear();
+        type.clear();
         orders.clear();
         description.clear();
     }
@@ -93,8 +119,7 @@ public class NotificationView extends Div implements AfterNavigationObserver {
 
     private void createFormLayout(VerticalLayout wrapper) {
         FormLayout formLayout = new FormLayout();
-        addFormItem(wrapper, formLayout, firstname, "First name");
-        addFormItem(wrapper, formLayout, lastname, "Last name");
+        addFormItem(wrapper, formLayout, type, "Type");
         FormLayout.FormItem ordersFormItem = addFormItem(wrapper, formLayout, orders, "Order");
         formLayout.setColspan(ordersFormItem, 2);
         FormLayout.FormItem descriptionFormItem = addFormItem(wrapper, formLayout,
@@ -127,6 +152,9 @@ public class NotificationView extends Div implements AfterNavigationObserver {
     public void afterNavigation(AfterNavigationEvent event) {
         orders.setItems(orderService.getAllActive());
         orders.setItemLabelGenerator(order -> order.getLabel() + " [" + order.getAddress() + "]");
+
+        type.setItems(NotificationType.values());
+        type.setItemLabelGenerator(NotificationType::getName);
     }
 
 
