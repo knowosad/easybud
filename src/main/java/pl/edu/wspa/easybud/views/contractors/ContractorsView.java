@@ -129,7 +129,7 @@ public class ContractorsView extends Div implements AfterNavigationObserver {
     if (allRequiredFilled()) {
       ContractorEntity entity =
           ContractorEntity.builder()
-              .state(State.ACTIVE.getName())
+              .state(State.ACTIVE)
               .number(number.getValue())
               .label(label.getValue())
               .name(name.getValue())

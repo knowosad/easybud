@@ -24,7 +24,7 @@ public class OrderService {
   }
 
   public List<OrderEntity> getOrders () {
-    return orderRepository.findByStateEquals(State.ACTIVE.getName());
+    return orderRepository.findByStateEquals(State.ACTIVE);
   }
 
   @Transactional
@@ -41,10 +41,10 @@ public class OrderService {
   @Transactional
   public void delete(String number) {
     OrderEntity entity = orderRepository.findByNumber(number);
-    entity.setState(State.DELETED.getName());
+    entity.setState(State.DELETED);
   }
 
   public List<OrderEntity> getAllActive() {
-    return orderRepository.findByStateEquals(State.ACTIVE.getName());
+    return orderRepository.findByStateEquals(State.ACTIVE);
   }
 }

@@ -2,9 +2,9 @@ package pl.edu.wspa.easybud.backend;
 
 public enum NotificationType {
 
-  NOTE("note"),
-  ORDER("order"),
-  ACCIDENT("accident");
+  NOTE("Note"),
+  ORDER("Order"),
+  ACCIDENT("Accident");
 
   private String name;
 

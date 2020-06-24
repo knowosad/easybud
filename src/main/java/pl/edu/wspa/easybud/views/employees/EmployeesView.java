@@ -230,7 +230,7 @@ public class EmployeesView extends Div implements AfterNavigationObserver {
 
   private EmployeeEntity buildEmployee() {
     return EmployeeEntity.builder()
-        .state(State.ACTIVE.getName())
+        .state(State.ACTIVE)
         .number(number.getValue())
         .label(label.getValue())
         .firstname(firstname.getValue())

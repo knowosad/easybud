@@ -24,13 +24,12 @@ public class ContractorService {
   }
 
   public List<ContractorEntity> getAllActive() {
-    return repository.findByStateEquals(State.ACTIVE.getName());
+    return repository.findByStateEquals(State.ACTIVE);
   }
 
   @Transactional
   public void update(ContractorEntity contractor) {
     ContractorEntity entity = repository.findByNumber(contractor.getNumber());
-    entity.setState(State.ACTIVE.getName());
     entity.setLabel(contractor.getLabel());
     entity.setName(contractor.getName());
     entity.setAddress(contractor.getAddress());
@@ -40,6 +39,6 @@ public class ContractorService {
   @Transactional
   public void delete(String number) {
     ContractorEntity entity = repository.findByNumber(number);
-    entity.setState(State.DELETED.getName());
+    entity.setState(State.DELETED);
   }
 }

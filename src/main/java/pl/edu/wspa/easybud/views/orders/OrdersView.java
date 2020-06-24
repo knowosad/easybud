@@ -160,7 +160,7 @@ public class OrdersView extends Div implements AfterNavigationObserver {
     if (allRequiredFilled()) {
       OrderEntity entity =
           OrderEntity.builder()
-              .state(State.ACTIVE.getName())
+              .state(State.ACTIVE)
               .number(number.getValue())
               .label(label.getValue())
               .name(name.getValue())

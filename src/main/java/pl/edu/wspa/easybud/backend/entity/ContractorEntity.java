@@ -4,8 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import pl.edu.wspa.easybud.backend.State;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -21,7 +24,10 @@ public class ContractorEntity {
   @Id
   @GeneratedValue
   private Long id;
-  private String state;
+
+  @Enumerated(EnumType.STRING)
+  private State state;
+
   private String number;
   private String label;
   private String name;

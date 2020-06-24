@@ -2,9 +2,9 @@ package pl.edu.wspa.easybud.backend;
 
 public enum State {
 
-  ACTIVE("active"),
-  DELETED("deleted"),
-  FINISHED("finished");
+  ACTIVE("Active"),
+  DELETED("Deleted"),
+  FINISHED("Finished");
 
   private String name;
 

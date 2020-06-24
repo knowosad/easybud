@@ -30,7 +30,7 @@ public class EmployeeService {
     }
 
     public List<EmployeeEntity> getEmployees () {
-        return employeeRepository.findByStateEquals(State.ACTIVE.getName());
+        return employeeRepository.findByStateEquals(State.ACTIVE);
     }
 
     @Transactional
@@ -45,7 +45,7 @@ public class EmployeeService {
     @Transactional
     public void delete(String number) {
         EmployeeEntity entity = employeeRepository.findByNumber(number);
-        entity.setState(State.DELETED.getName());
+        entity.setState(State.DELETED);
     }
 
     public List<EmployeeEntity> findAllByLabel(OrderEntity order) {

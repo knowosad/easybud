@@ -1,0 +1,28 @@
+-- drop schema if exists Corona;
+-- create schema Corona;
+-- use Corona;
+--
+-- CREATE TABLE Recipe (
+--     id INT AUTO_INCREMENT,
+--     recipe_name VARCHAR(150) NOT NULL,
+--     description VARCHAR(250),
+--     element1 VARCHAR(45),
+--     element2 VARCHAR(45),
+--     element3 VARCHAR(45),
+--     element4 VARCHAR(45),
+--     element5 VARCHAR(45),
+--     category VARCHAR(45),
+--     PRIMARY KEY (id)
+-- );
+--
+--   INSERT INTO Recipe
+--   VALUES(1,
+--   "Naleśniki",
+--   "Ubić białko na sztywno. Mąkę zmiksować z mlekiem, żółtkiem, dodać szczyptę soli. Delikatnie wymieszać z białkiem. Lać na patelnię z rozgrzanym olejem.",
+--   "1 jajko",
+--   "szklanka mąki",
+--   "szklanka mleka",
+--   "olej",
+--   null,
+--   null);
+  
