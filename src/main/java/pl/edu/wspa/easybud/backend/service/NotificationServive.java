@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import pl.edu.wspa.easybud.backend.entity.NotificationEntity;
 import pl.edu.wspa.easybud.backend.repository.NotificationsRepository;
 
+import java.util.List;
+
 @Service
 public class NotificationServive {
 
@@ -17,5 +19,9 @@ public class NotificationServive {
 
   public void create(NotificationEntity entity) {
     repository.save(entity);
+  }
+
+  public List<NotificationEntity> getAll(){
+    return repository.findAll();
   }
 }

@@ -20,6 +20,7 @@ import com.vaadin.flow.router.AfterNavigationEvent;
 import com.vaadin.flow.router.AfterNavigationObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.RouteAlias;
 import com.vaadin.flow.server.VaadinSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import pl.edu.wspa.easybud.backend.State;
@@ -31,6 +32,7 @@ import pl.edu.wspa.easybud.views.employees.EmployeesView;
 import pl.edu.wspa.easybud.views.main.MainView;
 
 @Route(value = "orders", layout = MainView.class)
+@RouteAlias(value = "", layout = MainView.class)
 @PageTitle("Orders")
 @CssImport("styles/views/masterdetail/master-detail-view.css")
 public class OrdersView extends Div implements AfterNavigationObserver {

@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import pl.edu.wspa.easybud.backend.State;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -31,6 +32,7 @@ public class ContractorEntity {
   private String number;
   private String label;
   private String name;
+  @Column(name = "nip_regon")
   private String nipRegon;
   private String address;
 }

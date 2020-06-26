@@ -29,6 +29,7 @@ import pl.edu.wspa.easybud.backend.service.OrderService;
 import pl.edu.wspa.easybud.views.main.MainView;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Route(value = "notification", layout = MainView.class)
 @PageTitle("Notification")
@@ -90,7 +91,7 @@ public class NotificationView extends Div implements AfterNavigationObserver {
             .type(type.getValue())
             .order(orders.getValue())
             .description(description.getValue())
-            .dateCreated(LocalDate.now())
+            .dateCreated(LocalDateTime.now())
             .userCreated(VaadinService.getCurrentRequest().getRemoteUser())
             .build();
     }

@@ -14,14 +14,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "t_notification")
+@Table(name = "t_notifications")
 public class NotificationEntity {
 
   @Id
@@ -38,7 +38,7 @@ public class NotificationEntity {
   private String userCreated;
 
   @Column(name = "created_date")
-  private LocalDate dateCreated;
+  private LocalDateTime dateCreated;
 
   private String description;
 
