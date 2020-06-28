@@ -1,4 +1,4 @@
-package pl.edu.wspa.easybud.views.form;
+package pl.edu.wspa.easybud.views.notifications;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
@@ -21,14 +21,13 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.VaadinService;
 import org.springframework.beans.factory.annotation.Autowired;
-import pl.edu.wspa.easybud.backend.NotificationType;
+import pl.edu.wspa.easybud.backend.util.NotificationType;
 import pl.edu.wspa.easybud.backend.entity.NotificationEntity;
 import pl.edu.wspa.easybud.backend.entity.OrderEntity;
 import pl.edu.wspa.easybud.backend.service.NotificationServive;
 import pl.edu.wspa.easybud.backend.service.OrderService;
 import pl.edu.wspa.easybud.views.main.MainView;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Route(value = "notification", layout = MainView.class)

@@ -23,7 +23,7 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
 import com.vaadin.flow.server.VaadinSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import pl.edu.wspa.easybud.backend.State;
+import pl.edu.wspa.easybud.backend.util.State;
 import pl.edu.wspa.easybud.backend.entity.ContractorEntity;
 import pl.edu.wspa.easybud.backend.entity.OrderEntity;
 import pl.edu.wspa.easybud.backend.service.ContractorService;
@@ -77,7 +77,6 @@ public class OrdersView extends Div implements AfterNavigationObserver {
     orders.addColumn(OrderEntity::getStartDate).setHeader("Start date");
     orders.addColumn(OrderEntity::getEndDate).setHeader("Start end");
     //when a row is selected or deselected, populate form
-//    orders.asSingleSelect().addValueChangeListener(event -> populateForm(event.getValue()));
     orders.addItemClickListener(event -> populateForm(event.getItem()));
 
     // Configure Form
@@ -248,7 +247,5 @@ public class OrdersView extends Div implements AfterNavigationObserver {
     // Value can be null as well, that clears the form
     binder.readBean(order);
 
-    // The password field isn't bound through the binder, so handle that
-    //        password.setValue("");
   }
 }

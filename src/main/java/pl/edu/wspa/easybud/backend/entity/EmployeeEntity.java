@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import pl.edu.wspa.easybud.backend.State;
+import pl.edu.wspa.easybud.backend.util.State;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

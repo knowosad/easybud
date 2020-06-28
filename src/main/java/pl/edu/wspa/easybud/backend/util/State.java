@@ -1,4 +1,4 @@
-package pl.edu.wspa.easybud.backend;
+package pl.edu.wspa.easybud.backend.util;
 
 public enum State {
 

@@ -1,4 +1,4 @@
-package pl.edu.wspa.easybud.views.cardlist;
+package pl.edu.wspa.easybud.views.notifications;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -16,7 +16,6 @@ import com.vaadin.flow.router.AfterNavigationObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
 import pl.edu.wspa.easybud.backend.entity.NotificationEntity;
 import pl.edu.wspa.easybud.backend.service.NotificationServive;
 import pl.edu.wspa.easybud.views.main.MainView;
@@ -25,7 +24,6 @@ import pl.edu.wspa.easybud.views.main.MainView;
 @PageTitle("Notification List")
 @CssImport(value = "styles/views/cardlist/card-list-view.css", include = "lumo-badge")
 @JsModule("@vaadin/vaadin-lumo-styles/badge.js")
-@Secured("ROLE_ADMIN")
 public class NotificationListView extends Div implements AfterNavigationObserver {
 
   @Autowired

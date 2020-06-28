@@ -3,7 +3,7 @@ package pl.edu.wspa.easybud.backend.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pl.edu.wspa.easybud.backend.State;
+import pl.edu.wspa.easybud.backend.util.State;
 import pl.edu.wspa.easybud.backend.entity.OrderEntity;
 import pl.edu.wspa.easybud.backend.repository.OrderRepository;
 

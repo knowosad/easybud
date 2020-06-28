@@ -1,7 +1,6 @@
 package pl.edu.wspa.easybud.views.employees;
 
 import com.vaadin.flow.component.AbstractField;
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
@@ -22,10 +21,7 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.VaadinService;
 import com.vaadin.flow.server.VaadinSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-import pl.edu.wspa.easybud.backend.State;
-import pl.edu.wspa.easybud.backend.entity.ContractorEntity;
+import pl.edu.wspa.easybud.backend.util.State;
 import pl.edu.wspa.easybud.backend.entity.EmployeeEntity;
 import pl.edu.wspa.easybud.backend.entity.OrderEntity;
 import pl.edu.wspa.easybud.backend.service.EmployeeService;

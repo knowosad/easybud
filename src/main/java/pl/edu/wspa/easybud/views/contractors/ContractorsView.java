@@ -18,9 +18,9 @@ import com.vaadin.flow.router.AfterNavigationObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
-import pl.edu.wspa.easybud.backend.State;
 import pl.edu.wspa.easybud.backend.entity.ContractorEntity;
 import pl.edu.wspa.easybud.backend.service.ContractorService;
+import pl.edu.wspa.easybud.backend.util.State;
 import pl.edu.wspa.easybud.views.main.MainView;
 
 @Route(value = "contractors", layout = MainView.class)
@@ -189,9 +189,6 @@ public class ContractorsView extends Div implements AfterNavigationObserver {
 
   @Override
   public void afterNavigation(AfterNavigationEvent event) {
-
-    // Lazy init of the grid items, happens only when we are sure the view will be
-    // shown to the user
     contractors.setItems(contractorService.getAllActive());
   }
 
@@ -199,10 +196,6 @@ public class ContractorsView extends Div implements AfterNavigationObserver {
     buttonLayout.replace(save, update);
     buttonLayout.add(delete);
     number.setEnabled(false);
-    // Value can be null as well, that clears the form
     binder.readBean(value);
-
-    // The password field isn't bound through the binder, so handle that
-    //        password.setValue("");
   }
 }

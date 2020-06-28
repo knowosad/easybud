@@ -18,12 +18,10 @@ import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.theme.Theme;import com.vaadin.flow.theme.lumo.Lumo;
 
 import pl.edu.wspa.easybud.views.contractors.ContractorsView;
-import pl.edu.wspa.easybud.views.dashboard.DashboardView;
 import pl.edu.wspa.easybud.views.orders.OrdersView;
 import pl.edu.wspa.easybud.views.employees.EmployeesView;
-import pl.edu.wspa.easybud.views.cardlist.NotificationListView;
-import pl.edu.wspa.easybud.views.form.NotificationView;
-import pl.edu.wspa.easybud.views.empty.EmptyView;
+import pl.edu.wspa.easybud.views.notifications.NotificationListView;
+import pl.edu.wspa.easybud.views.notifications.NotificationView;
 
 /**
  * The main view is a top-level placeholder for other views.
@@ -59,7 +57,6 @@ public class MainView extends AppLayout {
         tabs.add(createTab("Contractors", ContractorsView.class));
         tabs.add(createTab("Notification", NotificationView.class));
         tabs.add(createTab("Notifications List", NotificationListView.class));
-//        tabs.add(createTab("Empty", EmptyView.class));
         return tabs.toArray(new Tab[tabs.size()]);
     }
 

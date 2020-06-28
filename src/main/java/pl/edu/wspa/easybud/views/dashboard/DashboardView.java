@@ -30,6 +30,7 @@ import com.vaadin.flow.router.RouteAlias;
 import pl.edu.wspa.easybud.views.main.MainView;
 
 @Route(value = "dashboard", layout = MainView.class)
+//@RouteAlias(value = "", layout = MainView.class)
 @PageTitle("Dashboard")
 @CssImport(value = "styles/views/dashboard/dashboard-view.css", include = "lumo-badge")
 @JsModule("@vaadin/vaadin-lumo-styles/badge.js")
