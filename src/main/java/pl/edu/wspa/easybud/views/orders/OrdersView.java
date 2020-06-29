@@ -54,11 +54,11 @@ public class OrdersView extends Div implements AfterNavigationObserver {
   private ComboBox<ContractorEntity> contractors = new ComboBox<>();
   //    private PasswordField password = new PasswordField();
 
-  private Button cancel = new Button("Cancel");
-  private Button save = new Button("Save");
-  private Button update = new Button("Update");
-  private Button delete = new Button("Delete");
-  private Button goToEmployees = new Button("Show employees");
+  private Button cancel = new Button("Anuluj");
+  private Button save = new Button("Zapisz");
+  private Button update = new Button("Zaaktualizuj");
+  private Button delete = new Button("Usuń");
+  private Button goToEmployees = new Button("Pokaż pracowników");
 
   private Binder<OrderEntity> binder;
 
@@ -71,11 +71,11 @@ public class OrdersView extends Div implements AfterNavigationObserver {
     orders = new Grid<>();
     orders.addThemeVariants(GridVariant.LUMO_NO_BORDER);
     orders.setHeightFull();
-    orders.addColumn(OrderEntity::getNumber).setHeader("Number");
-    orders.addColumn(OrderEntity::getLabel).setHeader("Label");
-    orders.addColumn(OrderEntity::getName).setHeader("Name");
-    orders.addColumn(OrderEntity::getStartDate).setHeader("Start date");
-    orders.addColumn(OrderEntity::getEndDate).setHeader("Start end");
+    orders.addColumn(OrderEntity::getNumber).setHeader("Numer");
+    orders.addColumn(OrderEntity::getLabel).setHeader("Nazwa skrócona");
+    orders.addColumn(OrderEntity::getName).setHeader("Nazwa");
+    orders.addColumn(OrderEntity::getStartDate).setHeader("Data startu");
+    orders.addColumn(OrderEntity::getEndDate).setHeader("Data końca");
     //when a row is selected or deselected, populate form
     orders.addItemClickListener(event -> populateForm(event.getItem()));
 
@@ -116,7 +116,7 @@ public class OrdersView extends Div implements AfterNavigationObserver {
     buttonLayout.replace(goToEmployees, null);
     number.setEnabled(true);
     clearForm();
-    Notification.show("The order has been deleded");
+    Notification.show("Usunięto zlecenie");
   }
 
   private void clearForm() {
@@ -143,9 +143,9 @@ public class OrdersView extends Div implements AfterNavigationObserver {
       buttonLayout.replace(goToEmployees, null);
       number.setEnabled(true);
       clearForm();
-      Notification.show("The order has been updated");
+      Notification.show("Zaaktualizowano dane zlecenia");
     } else {
-      Notification.show("Set required values!");
+      Notification.show("Wprowadź dane!");
     }
   }
 
@@ -173,9 +173,9 @@ public class OrdersView extends Div implements AfterNavigationObserver {
       orderService.create(entity);
       orders.setItems(orderService.getOrders());
       clearForm();
-      Notification.show("The order has been created");
+      Notification.show("Utworzono zlecenie");
     } else {
-      Notification.show("Set required values!");
+      Notification.show("Wprowadź dane!");
     }
   }
 
@@ -187,13 +187,13 @@ public class OrdersView extends Div implements AfterNavigationObserver {
     Div editorDiv = new Div();
     editorDiv.setId("editor-layout");
     formLayout = new FormLayout();
-    addFormItem(editorDiv, formLayout, number, "Number");
-    addFormItem(editorDiv, formLayout, label, "Label");
-    addFormItem(editorDiv, formLayout, name, "Name");
-    addFormItem(editorDiv, formLayout, address, "Address");
-    addFormItem(editorDiv, formLayout, startDate, "Start date");
-    addFormItem(editorDiv, formLayout, endDate, "End date");
-    addFormItem(editorDiv, formLayout, contractors, "Contractor");
+    addFormItem(editorDiv, formLayout, number, "Numer");
+    addFormItem(editorDiv, formLayout, label, "Nazwa skrócona");
+    addFormItem(editorDiv, formLayout, name, "Nazwa");
+    addFormItem(editorDiv, formLayout, address, "Adres");
+    addFormItem(editorDiv, formLayout, startDate, "Data startu");
+    addFormItem(editorDiv, formLayout, endDate, "Data końca");
+    addFormItem(editorDiv, formLayout, contractors, "Kontrahent");
 
     createButtonLayout(editorDiv);
     splitLayout.addToSecondary(editorDiv);

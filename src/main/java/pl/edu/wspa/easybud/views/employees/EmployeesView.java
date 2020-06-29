@@ -47,10 +47,10 @@ public class EmployeesView extends Div implements AfterNavigationObserver {
   private TextField lastname = new TextField();
   private ComboBox<OrderEntity> orders = new ComboBox<>();
 
-  private Button cancel = new Button("Cancel");
-  private Button save = new Button("Save");
-  private Button update = new Button("Update");
-  private Button delete = new Button("Delete");
+  private Button cancel = new Button("Anuluj");
+  private Button save = new Button("Zapisz");
+  private Button update = new Button("Zaaktualizuj");
+  private Button delete = new Button("Usuń");
 
   private Binder<EmployeeEntity> binder;
 
@@ -62,11 +62,11 @@ public class EmployeesView extends Div implements AfterNavigationObserver {
     employees = new Grid<>();
     employees.addThemeVariants(GridVariant.LUMO_NO_BORDER);
     employees.setHeightFull();
-    employees.addColumn(EmployeeEntity::getNumber).setHeader("Number");
-    employees.addColumn(EmployeeEntity::getLabel).setHeader("Label");
-    employees.addColumn(EmployeeEntity::getFirstname).setHeader("First name");
-    employees.addColumn(EmployeeEntity::getLastname).setHeader("Last name");
-    employees.addColumn(emp -> emp.getOrder().getLabel()).setHeader("Order");
+    employees.addColumn(EmployeeEntity::getNumber).setHeader("Numer");
+    employees.addColumn(EmployeeEntity::getLabel).setHeader("Nazwa skrócona");
+    employees.addColumn(EmployeeEntity::getFirstname).setHeader("Imię");
+    employees.addColumn(EmployeeEntity::getLastname).setHeader("Nazwisko");
+    employees.addColumn(emp -> emp.getOrder().getLabel()).setHeader("Zlecenie");
 
     //when a row is selected or deselected, populate form
     employees.addItemClickListener(event -> populateForm(event.getItem()));
@@ -101,7 +101,7 @@ public class EmployeesView extends Div implements AfterNavigationObserver {
     hideDeleteBtn();
     number.setEnabled(true);
     clearForm();
-    Notification.show("The employee has been deleded");
+    Notification.show("Usunięto pracownika");
   }
 
   private void clearForm() {
@@ -119,19 +119,18 @@ public class EmployeesView extends Div implements AfterNavigationObserver {
       hideDeleteBtn();
       number.setEnabled(true);
       clearForm();
-      Notification.show("The employee has been updated");
+      Notification.show("Zaaktualizowano dane praconika");
     } else {
-      Notification.show("Set required values!");
+      Notification.show("Wprowadź dane!");
     }
   }
 
 
   private void cancel() {
 
-    if(VaadinService.getCurrentRequest().isUserInRole("USER")){
-      Notification.show("user is USER");
-    }
-
+//    if(VaadinService.getCurrentRequest().isUserInRole("USER")){
+//      Notification.show("user is USER");
+//    }
     clearForm();
     number.setEnabled(true);
     buttonLayout.replace(update, save);
@@ -144,9 +143,9 @@ public class EmployeesView extends Div implements AfterNavigationObserver {
       employeeService.create(entity);
       fillGrid();
       clearForm();
-      Notification.show("The employee has been created");
+      Notification.show("Utworzono pracownika");
     } else {
-      Notification.show("Set required values!");
+      Notification.show("Wprowadź dane!");
     }
   }
 
@@ -159,11 +158,11 @@ public class EmployeesView extends Div implements AfterNavigationObserver {
     Div editorDiv = new Div();
     editorDiv.setId("editor-layout");
     formLayout = new FormLayout();
-    addFormItem(editorDiv, formLayout, number, "Number");
-    addFormItem(editorDiv, formLayout, label, "Label");
-    addFormItem(editorDiv, formLayout, firstname, "First name");
-    addFormItem(editorDiv, formLayout, lastname, "Last name");
-    addFormItem(editorDiv, formLayout, orders, "Order");
+    addFormItem(editorDiv, formLayout, number, "Numer");
+    addFormItem(editorDiv, formLayout, label, "Nazwa skrócona");
+    addFormItem(editorDiv, formLayout, firstname, "Imię");
+    addFormItem(editorDiv, formLayout, lastname, "Nazwisko");
+    addFormItem(editorDiv, formLayout, orders, "Zlecenie");
     createButtonLayout(editorDiv);
     splitLayout.addToSecondary(editorDiv);
   }

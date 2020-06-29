@@ -25,7 +25,7 @@ public class LoginView extends VerticalLayout {
     userNameTextField.getElement().setAttribute("name", "username");
     PasswordField passwordField = new PasswordField();
     passwordField.getElement().setAttribute("name", "password");
-    Button submitButton = new Button("Login");
+    Button submitButton = new Button("Zaloguj");
     submitButton.setId("submitbutton");
     UI.getCurrent().getPage().executeJs("document.getElementById('submitbutton').addEventListener('click', () => document.getElementById('ironform').submit());");
 

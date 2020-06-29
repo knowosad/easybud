@@ -52,11 +52,11 @@ public class MainView extends AppLayout {
     private static Tab[] getAvailableTabs() {
         final List<Tab> tabs = new ArrayList<>();
 //        tabs.add(createTab("Dashboard", DashboardView.class));
-        tabs.add(createTab("Orders", OrdersView.class));
-        tabs.add(createTab("Employees", EmployeesView.class));
-        tabs.add(createTab("Contractors", ContractorsView.class));
-        tabs.add(createTab("Notification", NotificationView.class));
-        tabs.add(createTab("Notifications List", NotificationListView.class));
+        tabs.add(createTab("Zlecenia", OrdersView.class));
+        tabs.add(createTab("Pracownicy", EmployeesView.class));
+        tabs.add(createTab("Kontrahenci", ContractorsView.class));
+        tabs.add(createTab("Powiadomienia", NotificationView.class));
+        tabs.add(createTab("Karta powiadomień", NotificationListView.class));
         return tabs.toArray(new Tab[tabs.size()]);
     }
 

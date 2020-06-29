@@ -14,7 +14,6 @@ public class ContractorService {
 
   private final ContractorRepository repository;
 
-  @Autowired
   public ContractorService(ContractorRepository repository) {
     this.repository = repository;
   }

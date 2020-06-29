@@ -38,10 +38,10 @@ public class ContractorsView extends Div implements AfterNavigationObserver {
   private TextField number = new TextField();
   private TextField address = new TextField();
 
-  private Button cancel = new Button("Cancel");
-  private Button save = new Button("Save");
-  private Button update = new Button("Update");
-  private Button delete = new Button("Delete");
+  private Button cancel = new Button("Anuluj");
+  private Button save = new Button("Zapisz");
+  private Button update = new Button("Zaktualizuj");
+  private Button delete = new Button("Usuń");
 
   private Binder<ContractorEntity> binder;
 
@@ -54,9 +54,9 @@ public class ContractorsView extends Div implements AfterNavigationObserver {
     contractors = new Grid<>();
     contractors.addThemeVariants(GridVariant.LUMO_NO_BORDER);
     contractors.setHeightFull();
-    contractors.addColumn(ContractorEntity::getNumber).setHeader("Number");
-    contractors.addColumn(ContractorEntity::getLabel).setHeader("Label");
-    contractors.addColumn(ContractorEntity::getName).setHeader("Name");
+    contractors.addColumn(ContractorEntity::getNumber).setHeader("Numer");
+    contractors.addColumn(ContractorEntity::getLabel).setHeader("Nazwa skrócona");
+    contractors.addColumn(ContractorEntity::getName).setHeader("Nazwa");
 
     //when a row is selected or deselected, populate form
     contractors.asSingleSelect().addValueChangeListener(event -> populateForm(event.getValue()));
@@ -90,7 +90,7 @@ public class ContractorsView extends Div implements AfterNavigationObserver {
     buttonLayout.replace(delete, null);
     number.setEnabled(true);
     clearForm();
-    Notification.show("The order has been deleded");
+    Notification.show("Usunięto kontrahenta");
   }
 
   private void clearForm() {
@@ -112,9 +112,9 @@ public class ContractorsView extends Div implements AfterNavigationObserver {
       buttonLayout.replace(delete, null);
       number.setEnabled(true);
       clearForm();
-      Notification.show("The contractor has been updated");
+      Notification.show("Zaaktualizowano dane kontrahenta");
     } else {
-      Notification.show("Set required values!");
+      Notification.show("Wprowadź dane!");
     }
   }
 
@@ -138,9 +138,9 @@ public class ContractorsView extends Div implements AfterNavigationObserver {
       contractorService.create(entity);
       contractors.setItems(contractorService.getAllActive());
       clearForm();
-      Notification.show("The contractor has been created");
+      Notification.show("Utworzono kontrahenta");
     } else {
-      Notification.show("Set required values!");
+      Notification.show("Wprowadz dane!");
     }
   }
 
@@ -152,10 +152,10 @@ public class ContractorsView extends Div implements AfterNavigationObserver {
     Div editorDiv = new Div();
     editorDiv.setId("editor-layout");
     formLayout = new FormLayout();
-    addFormItem(editorDiv, formLayout, number, "Number");
-    addFormItem(editorDiv, formLayout, label, "Label");
-    addFormItem(editorDiv, formLayout, name, "Name");
-    addFormItem(editorDiv, formLayout, address, "Address");
+    addFormItem(editorDiv, formLayout, number, "Numer");
+    addFormItem(editorDiv, formLayout, label, "Nazwa skrócona");
+    addFormItem(editorDiv, formLayout, name, "Nazwa");
+    addFormItem(editorDiv, formLayout, address, "Adres");
 
     createButtonLayout(editorDiv);
     splitLayout.addToSecondary(editorDiv);

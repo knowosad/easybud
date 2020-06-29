@@ -45,8 +45,8 @@ public class NotificationView extends Div implements AfterNavigationObserver {
     private ComboBox<OrderEntity> orders = new ComboBox<>();
     private TextArea description = new TextArea();
 
-    private Button cancel = new Button("Cancel");
-    private Button save = new Button("Save");
+    private Button cancel = new Button("Anuluj");
+    private Button save = new Button("Zapisz");
 
     public NotificationView() {
         setId("form-view");
@@ -72,12 +72,12 @@ public class NotificationView extends Div implements AfterNavigationObserver {
         if (allRequiredFilled()) {
             NotificationEntity entity = buildNotification();
             notificationServive.create(entity);
-            Notification.show("The notification has been created");
+            Notification.show("Utworzono powiadomienie");
 
             UI.getCurrent().navigate("card-list");
             clearForm();
         }else {
-            Notification.show("Set required values!");
+            Notification.show("Wprowadź dane!");
         }
     }
 
@@ -106,7 +106,7 @@ public class NotificationView extends Div implements AfterNavigationObserver {
     }
 
     private void createTitle(VerticalLayout wrapper) {
-        H1 h1 = new H1("Notification");
+        H1 h1 = new H1("Powiadomienie");
         wrapper.add(h1);
     }
 
@@ -119,11 +119,11 @@ public class NotificationView extends Div implements AfterNavigationObserver {
 
     private void createFormLayout(VerticalLayout wrapper) {
         FormLayout formLayout = new FormLayout();
-        addFormItem(wrapper, formLayout, type, "Type");
-        FormLayout.FormItem ordersFormItem = addFormItem(wrapper, formLayout, orders, "Order");
+        addFormItem(wrapper, formLayout, type, "Typ");
+        FormLayout.FormItem ordersFormItem = addFormItem(wrapper, formLayout, orders, "Zlecenie");
         formLayout.setColspan(ordersFormItem, 2);
         FormLayout.FormItem descriptionFormItem = addFormItem(wrapper, formLayout,
-            description, "Notes");
+            description, "Opis");
         formLayout.setColspan(descriptionFormItem, 2);
     }
 
