@@ -17,7 +17,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
 import pl.edu.wspa.easybud.backend.entity.NotificationEntity;
-import pl.edu.wspa.easybud.backend.service.NotificationServive;
+import pl.edu.wspa.easybud.backend.service.NotificationService;
 import pl.edu.wspa.easybud.views.main.MainView;
 
 @Route(value = "notification-list", layout = MainView.class)
@@ -27,12 +27,12 @@ import pl.edu.wspa.easybud.views.main.MainView;
 public class NotificationListView extends Div implements AfterNavigationObserver {
 
   @Autowired
-  private final NotificationServive notificationServive;
+  private final NotificationService notificationService;
 
   Grid<NotificationEntity> grid = new Grid<>();
 
-  public NotificationListView(NotificationServive notificationServive) {
-    this.notificationServive = notificationServive;
+  public NotificationListView(NotificationService notificationService) {
+    this.notificationService = notificationService;
     setId("card-list-view");
     addClassName("card-list-view");
     setSizeFull();
@@ -75,7 +75,7 @@ public class NotificationListView extends Div implements AfterNavigationObserver
 
   @Override
   public void afterNavigation(AfterNavigationEvent event) {
-    List<NotificationEntity> notifications = notificationServive.getAll();
+    List<NotificationEntity> notifications = notificationService.getAll();
     grid.setItems(notifications);
   }
 }

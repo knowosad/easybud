@@ -24,7 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import pl.edu.wspa.easybud.backend.util.NotificationType;
 import pl.edu.wspa.easybud.backend.entity.NotificationEntity;
 import pl.edu.wspa.easybud.backend.entity.OrderEntity;
-import pl.edu.wspa.easybud.backend.service.NotificationServive;
+import pl.edu.wspa.easybud.backend.service.NotificationService;
 import pl.edu.wspa.easybud.backend.service.OrderService;
 import pl.edu.wspa.easybud.views.main.MainView;
 
@@ -39,7 +39,7 @@ public class NotificationView extends Div implements AfterNavigationObserver {
     private OrderService orderService;
 
     @Autowired
-    private NotificationServive notificationServive;
+    private NotificationService notificationService;
 
     private ComboBox<NotificationType> type = new ComboBox<>();
     private ComboBox<OrderEntity> orders = new ComboBox<>();
@@ -71,10 +71,10 @@ public class NotificationView extends Div implements AfterNavigationObserver {
     private void save() {
         if (allRequiredFilled()) {
             NotificationEntity entity = buildNotification();
-            notificationServive.create(entity);
+            notificationService.create(entity);
             Notification.show("Utworzono powiadomienie");
 
-            UI.getCurrent().navigate("card-list");
+            UI.getCurrent().navigate("notification-list");
             clearForm();
         }else {
             Notification.show("Wprowadź dane!");
